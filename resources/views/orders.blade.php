@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>注文書一覧</title>
+    <!-- 共通CSS -->
     <link rel="stylesheet" href="{{ asset('css/home.css') }}">
     <link rel="stylesheet" href="{{ asset('css/orders.css') }}">
 </head>
 <body>
+    <!-- ハンバーガーメニューボタン -->
     <div class="menu-btn" id="menuBtn">☰</div>
-    <div class="sidebar-bg" id="sidebarBg"></div>
-    <div class="sidebar" id="sidebar">
+    <!-- サイドバー背景（モーダル用） -->
+    <div class="sidebar-bg" id="sidebarBg" style="display:none;"></div>
+    <!-- サイドバー -->
+    <div class="sidebar" id="sidebar" style="display:none;">
         <span class="sidebar-close" id="sidebarClose">&times;</span>
         <ul>
             <li><a href="{{ url('/home') }}"><span style="font-size:1.2em;">&#8962;</span> <b>HOME</b></a></li>
@@ -19,6 +23,8 @@
             <li><a href="{{ url('/trash') }}">・ゴミ箱</a></li>
         </ul>
     </div>
+
+    <!-- メインコンテンツ -->
     <div class="main" id="main">
         <h1 class="orders-title">注文書一覧</h1>
         <div class="orders-toolbar">
@@ -29,7 +35,6 @@
                     <span class="filter-icon">⏷</span>
                 </button>
             </div>
-            
         </div>
         <div class="filter-panel" id="filterPanel">
             <div>
@@ -102,35 +107,53 @@
             </table>
         </div>
         <div class="orders-btns">
-    <a href="{{ url('/order') }}" class="btn create-btn">新規注文書作成</a>
-    <button class="btn delete-btn">注文書削除</button>
-</div>
+            <a href="{{ url('/order') }}" class="btn create-btn">新規注文書作成</a>
+            <button class="btn delete-btn">注文書削除</button>
+        </div>
     </div>
+
+    <!-- サイドバー開閉用スクリプト（共通） -->
     <script>
     function toggleFilter() {
         document.getElementById('filterPanel').classList.toggle('show');
     }
     document.addEventListener('DOMContentLoaded', function () {
+        // 要素取得
         const sidebar = document.getElementById('sidebar');
         const menuBtn = document.getElementById('menuBtn');
         const sidebarClose = document.getElementById('sidebarClose');
         const sidebarBg = document.getElementById('sidebarBg');
+
+        // サイドバーを開く
         function openSidebar() {
             sidebar.classList.add('open');
+            sidebar.style.display = 'block';
             sidebarBg.classList.add('show');
+            sidebarBg.style.display = 'block';
+            document.body.classList.add('sidebar-open');
+            menuBtn.style.display = 'none'; // サイドバー表示中はボタン非表示
         }
+        // サイドバーを閉じる
         function closeSidebar() {
             sidebar.classList.remove('open');
+            sidebar.style.display = 'none';
             sidebarBg.classList.remove('show');
+            sidebarBg.style.display = 'none';
+            document.body.classList.remove('sidebar-open');
+            menuBtn.style.display = 'flex'; // サイドバー閉じたらボタン表示
         }
+
+        // イベント登録
         menuBtn.addEventListener('click', function (e) {
             openSidebar();
             e.stopPropagation();
         });
         sidebarClose.addEventListener('click', closeSidebar);
         sidebarBg.addEventListener('click', closeSidebar);
-            document.addEventListener('keydown', function (e) {
-                if (e.key === 'Escape') closeSidebar();
+
+        // ESCキーでサイドバーを閉じる
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeSidebar();
         });
     });
     </script>
